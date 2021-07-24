@@ -1,0 +1,39 @@
+.recommendation {
+    padding: 50px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.cardList {
+    margin: 5px 0 5px;
+}
+
+.head {
+    display: grid;
+    /* justify-content: space-around; */
+    /* flex-direction: row;
+    align-content: end;
+    align-items: stretch; */
+}
+
+.meow .bodyModal {
+    max-width: 800px !important;
+}
+
+.meow .modal-content {
+    border: 0px !important;
+    padding: 10px;
+    border-radius: 25px !important;
+    overflow: visible;
+    background-color: #66ceff !important;
+    outline: none !important;
+    height: 350px;
+}
+
+.center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

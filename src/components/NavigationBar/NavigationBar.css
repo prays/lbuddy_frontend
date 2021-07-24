@@ -1,0 +1,12 @@
+.brand {
+    display: flex;
+}
+
+.name {
+    margin-bottom: 0;
+    margin-left: 7px;
+}
+
+.myLink {
+    padding: 0px !important;
+}

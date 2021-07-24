@@ -1,0 +1,19 @@
+.cardDeck {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    flex-wrap: wrap;
+    height: auto;
+}
+
+.card {
+    width: 350px;
+    border-radius: 10px;
+    margin: 20px;
+    border-width: 10px;
+    justify-self: center;
+}
+
+.hello {
+    margin: 10px;
+}

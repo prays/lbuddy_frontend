@@ -1,0 +1,18 @@
+.App {
+  text-align: center;
+}
+
+.myNavbar {
+  padding: 0 !important;
+}
+
+.body {
+  margin-top: 50px;
+}
+
+.routes {
+  padding: 50px;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+}
