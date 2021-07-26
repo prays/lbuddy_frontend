@@ -34,11 +34,11 @@ const NavigationBar = ({ isSignedIn, setIsSignedIn }) => {
                 </Navbar.Brand>
             </Link>
             <Nav className="mr-auto">
-                <Nav.Link><Link className="nav-link myLink" to="/">Home</Link></Nav.Link>
-                <Nav.Link><Link className="nav-link myLink" to="/my-courses">My Courses</Link></Nav.Link>
+                <Link className="nav-link" to="/">Home</Link>
+                <Link className="nav-link" to="/my-courses">My Courses</Link>
                 {!isSignedIn
                 ? (<Button variant="success" disabled>Recommendation</Button>)
-                : (<Link to="/write"><Button variant="success">Try Recommendation</Button></Link>)}
+                : (<Link to="/write"><Button variant="success">Recommendation</Button></Link>)}
             </Nav>
             {isSignedIn
             ? (<Button onClick={onSignOut} variant="outline-light">Sign Out</Button>)

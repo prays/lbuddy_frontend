@@ -18,9 +18,9 @@ const loadData = () => JSON.parse(JSON.stringify(jsonData));
 const readCourses = loadData();
 
 const initialUser = {
-  email: '',
+  email: 'pray@gmail.com',
   first_name: 'Pray',
-  last_name: '',
+  last_name: 'Apostel',
   group_id: 2,
   courses: [
     {
@@ -42,8 +42,17 @@ const initialUser = {
       "joined": "2021-07-07T14:19:14.000Z"
     }
   ],
-  joined: ''
+  joined: '2021-07-07T14:18:47.000Z'
 }
+
+// const initialUser = {
+//   email: '',
+//   first_name: '',
+//   last_name: '',
+//   group_id: 2,
+//   courses: [],
+//   joined: ''
+// }
 
 const App = () => {
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -72,7 +81,7 @@ const App = () => {
             <SignUp setIsSignedIn={setIsSignedIn} loadUser={loadUser} />
           </Route>
           <Route path="/write">
-            <Recommendation survey={survey} readCourses={readCourses} />
+            <Recommendation user={user} survey={survey} readCourses={readCourses} />
           </Route> 
           <Route path="/my-courses">
             <MyCourses loadUser={loadUser} user={user} readCourses={readCourses}/>

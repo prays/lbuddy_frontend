@@ -9,8 +9,10 @@ import Modal from 'react-bootstrap/Modal';
 import './Recommendation.css';
 import { Link } from 'react-router-dom';
 import loading from './loading.gif';
+import SendIcon from '@material-ui/icons/Send';
+import { WEBSITE_LINK } from '../../constants';
 
-const Recommendation = ({ readCourses, survey }) => {
+const Recommendation = ({ readCourses, survey, user }) => {
     const [text, setText] = useState(`I'm currently working as ${survey.q1 || '[occupation]'}. My specialties are ${survey.q2[0] || '[skill1]'}, ${survey.q2[1] || '[skill2]'}, and ${survey.q2[2] || '[skill3]'}. I have some difficulties in ...`);
     const [recommendations, setRecommendations] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -28,14 +30,15 @@ const Recommendation = ({ readCourses, survey }) => {
     const onSubmitWCS = () => {
         handleShowModal();
 
-        fetch('https://whispering-journey-06124.herokuapp.com/https://68qo4ph1tc.execute-api.ap-southeast-1.amazonaws.com/inference', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            statement: text
-        })
+        fetch(`${WEBSITE_LINK}/rec`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: user.email,
+                statement: text
+            })
         })
         .then(response => response.json())
         .then(getData => {
@@ -88,25 +91,25 @@ const Recommendation = ({ readCourses, survey }) => {
             <Row className="recommendation">
                 <Col className="">
                     <h2 style={{display: 'grid', justifySelf: 'start'}}>Enter your Work Challenge Statement</h2>
-                    <Link to="/guide">
+                    {/* <Link to="/guide">
                         <Button
                         variant="primary" 
                         style={{marginBottom: '10px', display: 'grid', justifySelf: 'end'}}>
                             Guide
                         </Button>
-                    </Link>
+                    </Link> */}
                 </Col>
                 <Col>
                     <Form>
                         <Form.Group >
-                            <Form.Control onChange={onTextChange} as="textarea" rows={10}>
-                                {text}
-                            </Form.Control>
+                            <Form.Control value={text} onChange={onTextChange} as="textarea" rows={10} />
                         </Form.Group>
                     </Form>
                 </Col>
                 <Col>
-                    <Button onClick={onSubmitWCS} variant="primary" size="lg">Submit</Button>
+                    <Button style={{ display: 'flex', alignItems: 'stretch' }}onClick={onSubmitWCS} variant="primary" size="lg">
+                        Submit<SendIcon style={{margin: '5px 0px 5px 10px'}}></SendIcon>
+                    </Button>
                 </Col>
                 {recommendations.length !== 0
                 ?   (

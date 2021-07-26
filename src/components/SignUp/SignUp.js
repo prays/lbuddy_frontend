@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
+// import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Modal from 'react-bootstrap/Modal';
 // import Radio from '@material-ui/core/Radio';
@@ -78,7 +78,7 @@ export default function SignUp({ loadUser, setIsSignedIn }) {
               last_name: lastName,
               email: email,
               password: password,
-              group_id: Math.floor(Math.random() * 10) + 1
+              group_id: Math.floor(Math.random() * 2) + 1
           })
         })
         const user = await response.json();
@@ -100,8 +100,8 @@ export default function SignUp({ loadUser, setIsSignedIn }) {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
+    <Container style={{padding: '70px 0'}} component="main" maxWidth="xs">
+      {/* <CssBaseline /> */}
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />

@@ -13,7 +13,7 @@ const Home = () => {
                 <Col className="start">
                     <h1>Start your journey with us!</h1>
                     <h5>Join us @LearningBuddy</h5>
-                    <Link to="/write"><Button variant="outline-primary">Join</Button></Link>{' '}
+                    <Link to="/sign-up"><Button variant="outline-primary">Join</Button></Link>{' '}
                 </Col>
             </Row>
             <Diagram />   

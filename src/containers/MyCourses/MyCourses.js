@@ -111,7 +111,7 @@ const MyCourses = ({ user, readCourses, loadUser }) => {
 
 const CardListMyCourses = ({ recommendations }) => {
     return (
-        <div style={{ overflowY: 'scroll', borderRadius: '25px', border: '0.5px solid black', height: '500px' }}>
+        <div style={{ marginBottom: '75px', overflowY: 'scroll', borderRadius: '25px', border: '0.5px solid black', height: '500px' }}>
             <div className="cardDeck">
                 {
                     recommendations.map((user, id) => {
