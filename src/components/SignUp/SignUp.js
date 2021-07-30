@@ -19,6 +19,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import SnackbarError from '../SnackbarError/SnackbarError';
+import blockSQLInjection, { blockXSS } from '../Security/Security.js';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -67,31 +68,99 @@ export default function SignUp({ loadUser, setIsSignedIn }) {
     setPassword(event?.target?.value);
   }
 
+  const saveAuthTokenInSession = (token) => {
+    window.sessionStorage.setItem('token', token);
+  }
+
   const onSubmitSignUp = async () => {
     if (firstName && lastName && email && password) {
       try {
-        const response = await fetch(`${WEBSITE_LINK}/register`, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-              first_name: firstName,
-              last_name: lastName,
-              email: email,
-              password: password,
-              group_id: Math.floor(Math.random() * 2) + 1
-          })
+        const formArray = [firstName, lastName, email, password];
+        formArray.forEach(item => {
+          blockSQLInjection(item);
+          blockXSS(item);
         })
-        const user = await response.json();
-        if (user.email) {
-          loadUser(user);
-          await setIsSignedIn(true);
-          history.push('/guide');
-        } else {
-          setError('Oops, unexpected error. Please make sure your email is not being used before.');
-          setOpenSnackbar(true);
+        try {
+          const response = await fetch(`${WEBSITE_LINK}/register`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                first_name: firstName,
+                last_name: lastName,
+                email: email,
+                password: password,
+                group_id: Math.floor(Math.random() * 2) + 1
+            })
+          })
+          const data = await response.json();
+          if (data && data.email) {
+            const response = await fetch(`${WEBSITE_LINK}/sign-in`, {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                  email: email,
+                  password: password
+              })
+            })
+            const data = await response.json();
+            if (data.email && data.success === 'true') {
+              saveAuthTokenInSession(data.token);
+              fetch(`${WEBSITE_LINK}/sign-in`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': data.token
+                }
+              })
+              .then(resp => resp.json())
+              .then(result => {
+                if (result && result.email) {
+                  fetch(`${WEBSITE_LINK}/profile/${result.email}`, {
+                    method: 'GET',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': data.token
+                    }
+                  })
+                  .then(resp => resp.json())
+                  .then(user => {
+                    if (user && user.email) {
+                      fetch(`${WEBSITE_LINK}/get-courses`, {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                          'Authorization': window.sessionStorage.getItem('token')
+                        },
+                        body: JSON.stringify({
+                          email: email
+                        })
+                      })
+                      .then(resp => resp.json())
+                      .then(myCourses => {
+                        loadUser(Object.assign({}, user, { courses: myCourses }));
+                        setIsSignedIn(true);
+                        history.push('/');
+                      })
+                    }
+                  })
+                  .catch(console.log)
+                }
+              })
+              .catch(console.log)
+            } else {
+              setError('Incorrect combination of email and password. Please try again.');
+              setOpenSnackbar(true);
+            }
+          } else {
+            setError('Oops, unexpected error. Please make sure your email is not being used before.');
+            setOpenSnackbar(true);
+          }
+        } catch (error) {
+          console.log(error);
         }
       } catch (error) {
-        console.log(error);
+        setError(`Invalid character detected (#, ', ", -). Kindly change your input.`);
+        setOpenSnackbar(true);
       }
     } else {
       setError('Please fill in all the field.')

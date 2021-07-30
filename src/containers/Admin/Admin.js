@@ -15,7 +15,13 @@ const Admin = () => {
     React.useEffect(() => {
     const fetchData = async () => {
         try {
-        const data = await fetch(`${WEBSITE_LINK}/get-particular`);
+        const data = await fetch(`${WEBSITE_LINK}/get-particular`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': window.sessionStorage.getItem('token')
+            }
+        });
         const particular = await data.json();
         const newParticular = particular.map((item, id) => {
             const idObject = { id: id }

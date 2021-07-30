@@ -52,6 +52,10 @@ export default function SignIn({ loadUser, setIsSignedIn }) {
     setPassword(event?.target?.value);
   }
 
+  const saveAuthTokenInSession = (token) => {
+    window.sessionStorage.setItem('token', token);
+  }
+
   const onSubmitSignIn = async () => {
     if (email && password) {
       try {
@@ -63,24 +67,51 @@ export default function SignIn({ loadUser, setIsSignedIn }) {
               password: password
           })
         })
-        const user = await response.json();
-        if (user.email) {
-          try {
-            const data = await fetch(`${WEBSITE_LINK}/get-courses`, {
-              method: 'POST',
-              headers: {'Content-Type': 'application/json'},
-              body: JSON.stringify({
-                email: email
+        const data = await response.json();
+        if (data.email && data.success === 'true') {
+          saveAuthTokenInSession(data.token);
+          fetch(`${WEBSITE_LINK}/sign-in`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': data.token
+            }
+          })
+          .then(resp => resp.json())
+          .then(result => {
+            if (result && result.email) {
+              fetch(`${WEBSITE_LINK}/profile/${result.email}`, {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': data.token
+                }
               })
-            });
-            const myCourses = await data.json();
-            console.log(myCourses)
-            loadUser(Object.assign({}, user, { courses: myCourses }));
-            await setIsSignedIn(true);
-            history.push('/');
-          } catch (error) {
-            console.log(error);
-          }
+              .then(resp => resp.json())
+              .then(user => {
+                if (user && user.email) {
+                  fetch(`${WEBSITE_LINK}/get-courses`, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': window.sessionStorage.getItem('token')
+                    },
+                    body: JSON.stringify({
+                      email: email
+                    })
+                  })
+                  .then(resp => resp.json())
+                  .then(myCourses => {
+                    loadUser(Object.assign({}, user, { courses: myCourses }));
+                    setIsSignedIn(true);
+                    history.push('/');
+                  })
+                }
+              })
+              .catch(console.log)
+            }
+          })
+          .catch(console.log)
         } else {
           setError('Incorrect combination of email and password. Please try again.');
           setOpenSnackbar(true);

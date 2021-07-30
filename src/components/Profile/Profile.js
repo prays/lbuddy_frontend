@@ -27,7 +27,8 @@ const Profile = ({ users }) => {
                     const data = await fetch(`${WEBSITE_LINK}/get-wcs`, {
                         method: 'post',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'Authorization': window.sessionStorage.getItem('token')
                         },
                         body: JSON.stringify({
                             email: email

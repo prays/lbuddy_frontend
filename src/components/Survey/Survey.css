@@ -1,5 +1,8 @@
 .survey {
     padding: 50px;
+    /* padding-top: 0px;
+    padding-left: 15px;
+    padding-right: 0px; */
     margin-bottom: 30px;
     display: flex;
     flex-direction: column;

@@ -263,7 +263,7 @@ const Survey = ({setSurvey}) => {
                 </Row>
             </div> */}
             <Row>
-                 <Col style={{display: 'flex', justifyContent: 'flex-end', marginBottom: '30px'}}>
+                <Col style={{display: 'flex', justifyContent: 'flex-end', marginBottom: '30px'}}>
                     <Link to="/write"><Button size="lg" variant="primary">Continue</Button></Link>
                 </Col>
             </Row>
@@ -271,4 +271,18 @@ const Survey = ({setSurvey}) => {
     );
 }
 
+
 export default Survey;
+
+{/* <Container className="survey" fluid="true">
+    <Row style={{borderBottom: '2px solid black'}}>
+        <h1>Hello</h1>
+    </Row>
+    <Row>
+        <div style={{display: 'grid', gridTemplateColumns: '1fr 3fr 1fr'}}>
+            <h3>Bro</h3>
+            <h3>HEHEHEHEHHEHEHEHEHEHEHEHEHEH</h3>
+            <h3></h3>
+        </div>
+    </Row>
+</Container> */}

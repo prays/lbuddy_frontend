@@ -40,13 +40,17 @@ const MyCourses = ({ user, readCourses, loadUser }) => {
     const handleComboBox = (event) => {
         setCourseOption(event?.target?.textContent);
     }
+
     
     const handleAddCourse = async () => {
         if (courseOption) {
             try {
                 const data = await fetch(`${WEBSITE_LINK}/set-courses`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': window.sessionStorage.getItem('token')
+                    },
                     body: JSON.stringify({
                         email: user.email,
                         course: courseOption

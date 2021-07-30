@@ -34,6 +34,7 @@ const Recommendation = ({ readCourses, survey, user }) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': window.sessionStorage.getItem('token')
             },
             body: JSON.stringify({
                 email: user.email,
