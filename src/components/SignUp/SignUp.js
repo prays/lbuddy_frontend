@@ -10,6 +10,11 @@ import Modal from 'react-bootstrap/Modal';
 // import FormLabel from '@material-ui/core/FormLabel';
 // import RadioGroup from '@material-ui/core/RadioGroup';
 // import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 import { WEBSITE_LINK } from '../../constants.js';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
@@ -20,6 +25,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import SnackbarError from '../SnackbarError/SnackbarError';
 import blockSQLInjection, { blockXSS } from '../Security/Security.js';
+import Datepicker from '../Datepicker/Datepicker';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -42,8 +48,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp({ loadUser, setIsSignedIn }) {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [birthdate, setBirthdate] = useState(new Date());
+  const [gender, setGender] = useState('');
+  const [education, setEducation] = useState('');
+  const [job, setJob] = useState('');
+  const [yearJoined, setYearJoined] = useState('');
+  const [industry, setIndustry] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -52,12 +63,32 @@ export default function SignUp({ loadUser, setIsSignedIn }) {
   const classes = useStyles();
   const history = useHistory();
   
-  const onFirstNameChange = (event) => {
-    setFirstName(event?.target?.value);
+  const onFullNameChange = (event) => {
+    setFullName(event?.target?.value);
   }
 
-  const onLastNameChange = (event) => {
-    setLastName(event?.target?.value);
+  const onBirthdateChange = (date) => {
+    setBirthdate(date);
+  }
+
+  const onGenderChange = (event) => {
+    setGender(event?.target?.value);
+  }
+
+  const onEducationChange = (event) => {
+    setEducation(event?.target?.value);
+  }
+
+  const onJobChange = (event) => {
+    setJob(event?.target?.value);
+  }
+
+  const onYearJoinedChange = (event) => {
+    setYearJoined(event?.target?.value);
+  }
+
+  const onIndustryChange = (event) => {
+    setIndustry(event?.target?.value);
   }
 
   const onEmailChange = (event) => {
@@ -73,9 +104,9 @@ export default function SignUp({ loadUser, setIsSignedIn }) {
   }
 
   const onSubmitSignUp = async () => {
-    if (firstName && lastName && email && password) {
+    if (fullName && birthdate && gender && education && job && yearJoined && industry && email && password) {
       try {
-        const formArray = [firstName, lastName, email, password];
+        const formArray = [fullName, gender, education, job, yearJoined, industry, email, password];
         formArray.forEach(item => {
           blockSQLInjection(item);
           blockXSS(item);
@@ -85,14 +116,19 @@ export default function SignUp({ loadUser, setIsSignedIn }) {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                first_name: firstName,
-                last_name: lastName,
                 email: email,
+                fullName: fullName,
+                birthdate: birthdate,
+                gender: gender,
+                education: education,
+                job: job,
+                yearJoined: yearJoined,
+                groupID: Math.floor(Math.random() * 2) + 1,
                 password: password,
-                group_id: Math.floor(Math.random() * 2) + 1
             })
           })
           const data = await response.json();
+          console.log(data);
           if (data && data.email) {
             const response = await fetch(`${WEBSITE_LINK}/sign-in`, {
               method: 'POST',
@@ -169,7 +205,7 @@ export default function SignUp({ loadUser, setIsSignedIn }) {
   }
 
   return (
-    <Container style={{padding: '70px 0'}} component="main" maxWidth="xs">
+    <Container style={{padding: '75px 30px', paddingTop: '0'}} component="main" maxWidth="xs">
       {/* <CssBaseline /> */}
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -180,29 +216,77 @@ export default function SignUp({ loadUser, setIsSignedIn }) {
         </Typography>
         <div className={classes.form} noValidate>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
                 autoComplete="fname"
-                name="firstName"
+                name="fullName"
                 variant="outlined"
                 required
                 fullWidth
-                id="firstName"
-                label="First Name"
+                id="fullName"
+                label="Full Name"
                 autoFocus
-                onChange={onFirstNameChange}
+                onChange={onFullNameChange}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
+              <Datepicker birthdate={birthdate} onBirthdateChange={onBirthdateChange} />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl component="fieldset">
+                <FormLabel component="legend">Gender</FormLabel>
+                <RadioGroup row aria-label="gender" name="gender1" value={gender} onChange={onGenderChange}>
+                  <FormControlLabel value="female" control={<Radio />} label="Female" />
+                  <FormControlLabel value="male" control={<Radio />} label="Male" />
+                </RadioGroup>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
               <TextField
                 variant="outlined"
                 required
                 fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-                onChange={onLastNameChange}
+                id="education"
+                label="Highest educational qualification attained"
+                name="education"
+                autoComplete="education"
+                onChange={onEducationChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="job"
+                label="Present job title"
+                name="job"
+                autoComplete="job"
+                onChange={onJobChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="yearJoined"
+                label="Year you joined the organisation"
+                name="yearJoined"
+                autoComplete="yearJoined"
+                onChange={onYearJoinedChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="industry"
+                label="Industry of work"
+                name="industry"
+                autoComplete="industry"
+                onChange={onIndustryChange}
               />
             </Grid>
             <Grid item xs={12}>

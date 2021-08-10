@@ -87,7 +87,7 @@ const MyCourses = ({ user, readCourses, loadUser }) => {
         <Container fluid="true">
             <Row className="MyCourses">
                 <Col>
-                    <h2>{`Hello, ${user.first_name}.`}</h2>
+                    <h2>{`Hello, ${user.full_name}.`}</h2>
                     <h5>{`You currently have ${coursesArray.length} courses.`}</h5>
                 </Col>
                 <Col>

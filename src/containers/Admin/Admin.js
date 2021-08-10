@@ -7,9 +7,10 @@ import Tab from 'react-bootstrap/Tab';
 import UserGrid from '../../components/UserGrid/UserGrid';
 import Profile from '../../components/Profile/Profile';
 import { WEBSITE_LINK } from '../../constants.js';
+import { Redirect } from 'react-router-dom';
 import './Admin.css';
 
-const Admin = () => {
+const Admin = ({ user }) => {
     const [users, setUsers] = React.useState([]);
 
     React.useEffect(() => {
@@ -41,24 +42,24 @@ const Admin = () => {
         <Container fluid="true">
             <Row className="admin">
                 <Col>
-                <Tabs defaultActiveKey="home" id="uncontrolled-tab-example">
-                    <Tab eventKey="home" title="Home">
-                        <div className="tabContent">
-                            <h2>Users</h2>
-                            <UserGrid users={users} />
-                        </div>
-                    </Tab>
-                    <Tab eventKey="profile" title="Profile">
-                        <div className="tabContent">
-                            <Profile users={users} />
-                        </div>
-                    </Tab>
-                    <Tab eventKey="contact" title="Contact">
-                        <div className="tabContent">
-                            <h1>Hello3</h1>
-                        </div>
-                    </Tab>
-                </Tabs>
+                    <Tabs defaultActiveKey="home" id="uncontrolled-tab-example">
+                        <Tab eventKey="home" title="Home">
+                            <div className="tabContent">
+                                <h2>Users</h2>
+                                <UserGrid users={users} />
+                            </div>
+                        </Tab>
+                        <Tab eventKey="profile" title="Profile">
+                            <div className="tabContent">
+                                <Profile users={users} />
+                            </div>
+                        </Tab>
+                        <Tab eventKey="contact" title="Contact">
+                            <div className="tabContent">
+                                <h1>Hello3</h1>
+                            </div>
+                        </Tab>
+                    </Tabs>
                 </Col>
             </Row>
         </Container>
@@ -66,3 +67,30 @@ const Admin = () => {
 }
 
 export default Admin;
+
+// user.isAdmin ?
+// (<Container fluid="true">
+//     <Row className="admin">
+//         <Col>
+//         <Tabs defaultActiveKey="home" id="uncontrolled-tab-example">
+//             <Tab eventKey="home" title="Home">
+//                 <div className="tabContent">
+//                     <h2>Users</h2>
+//                     <UserGrid users={users} />
+//                 </div>
+//             </Tab>
+//             <Tab eventKey="profile" title="Profile">
+//                 <div className="tabContent">
+//                     <Profile users={users} />
+//                 </div>
+//             </Tab>
+//             <Tab eventKey="contact" title="Contact">
+//                 <div className="tabContent">
+//                     <h1>Hello3</h1>
+//                 </div>
+//             </Tab>
+//         </Tabs>
+//         </Col>
+//     </Row>
+// </Container>) :
+// (<Redirect to="/" />)

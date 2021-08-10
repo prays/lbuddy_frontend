@@ -4,7 +4,7 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import Logo from './logo.png';
 
-const NavigationBar = ({ isSignedIn, setIsSignedIn }) => {
+const NavigationBar = ({ isSignedIn, setIsSignedIn, initialUser, loadUser }) => {
     const history = useHistory();
     const location = useLocation();
 
@@ -13,6 +13,8 @@ const NavigationBar = ({ isSignedIn, setIsSignedIn }) => {
         if (location.pathname !== '/') {
             history.push('/');
         } else {
+            window.sessionStorage.removeItem('token');
+            loadUser(initialUser);
             window.location.reload();
         }
     }

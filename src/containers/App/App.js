@@ -49,9 +49,15 @@ const readCourses = loadData();
 
 const initialUser = {
   email: '',
-  first_name: '',
-  last_name: '',
-  group_id: 2,
+  full_name: '',
+  birthdate: '',
+  gender: '',
+  education: '',
+  job: '',
+  year_joined: '',
+  group_id: 1,
+  is_admin: 0,
+  step: 1,
   courses: [],
   joined: ''
 }
@@ -74,7 +80,7 @@ const App = () => {
 
   return (
     <Container fluid="true">
-      <NavigationBar setIsSignedIn={setIsSignedIn} isSignedIn={isSignedIn} />
+      <NavigationBar initialUser={initialUser} loadUser={loadUser} setIsSignedIn={setIsSignedIn} isSignedIn={isSignedIn} />
       <div className="body">
         <Switch>
           <Route exact path="/">
@@ -86,11 +92,11 @@ const App = () => {
           <Route path="/sign-up">
             <SignUp setIsSignedIn={setIsSignedIn} loadUser={loadUser} />
           </Route>
-          <PrivateRoute path="/write" component={Recommendation} user={user} survey={survey} readCourses={readCourses} />
-          <PrivateRoute path="/my-courses" component={MyCourses} user={user} readCourses={readCourses} />
-          <PrivateRoute path="/guide" component={Guide} />
-          <PrivateRoute path="/admin" component={Admin} />
-          <PrivateRoute path="/survey" component={Survey} setSurvey={setSurvey} />  
+          <PrivateRoute isSignedIn={isSignedIn} path="/write" component={Recommendation} user={user} survey={survey} readCourses={readCourses} />
+          <PrivateRoute isSignedIn={isSignedIn} path="/my-courses" component={MyCourses} user={user} readCourses={readCourses} />
+          <PrivateRoute isSignedIn={isSignedIn} path="/guide" component={Guide} />
+          <PrivateRoute isSignedIn={isSignedIn} path="/admin" component={Admin} />
+          <PrivateRoute isSignedIn={isSignedIn} path="/survey" component={Survey} setSurvey={setSurvey} />  
         </Switch>
         <Footer />
       </div>
